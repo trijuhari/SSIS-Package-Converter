@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSIS Modernizer — DTSX to Modern Stack Converter</title>
+  <meta name="description" content="Convert SSIS .dtsx packages to modern data engineering stack: Python ingestion scripts, dbt transformation models, and Apache Airflow DAGs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="2" width="10" height="10" rx="2" fill="#00d4ff"/>
+          <rect x="16" y="2" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.8"/>
+          <rect x="2" y="16" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.6"/>
+          <rect x="16" y="16" width="10" height="10" rx="2" fill="#00d4ff" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="logo-text">SSIS<span class="logo-accent">Modernizer</span></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" id="nav-converter" onclick="showSection('converter')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span>Converter</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-history" onclick="showSection('history')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>History</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-docs" onclick="showSection('docs')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Docs</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="version-badge">v1.0 · 2026</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <h1 class="page-title">
+          <span class="title-from">SSIS</span>
+          <span class="title-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="arrowGrad" x1="5" y1="12" x2="19" y2="12" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#7c3aed"/>
+                  <stop offset="100%" stop-color="#00d4ff"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </span>
+          <span class="title-to">Modern Stack</span>
+        </h1>
+        <p class="page-subtitle">Convert .dtsx packages → Python · dbt · Airflow</p>
+      </div>
+      <div class="header-right">
+        <div class="status-pill" id="status-pill">
+          <span class="status-dot"></span>
+          <span id="status-text">Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONVERTER SECTION -->
+    <section class="section active" id="section-converter">
+
+      <!-- UPLOAD ZONE -->
+      <div class="upload-container" id="upload-container">
+        <div class="upload-zone" id="upload-zone"
+             ondragover="handleDragOver(event)"
+             ondragleave="handleDragLeave(event)"
+             ondrop="handleDrop(event)">
+          <div class="upload-icon-wrapper">
+            <div class="upload-icon-ring"></div>
+            <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="upload-title">Drop your <span class="highlight">.dtsx</span> file here</h3>
+          <p class="upload-desc">SSIS Package files will be parsed and converted automatically</p>
+          <div class="upload-actions">
+            <label class="btn-primary" for="file-input" id="browse-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              Browse Files
+            </label>
+            <input type="file" id="file-input" accept=".dtsx,.xml" style="display:none" onchange="handleFileSelect(event)" />
+            <span class="upload-hint">or paste XML content below</span>
+          </div>
+          <div class="upload-formats">
+            <span class="format-tag">.dtsx</span>
+            <span class="format-tag">SSIS Package</span>
+            <span class="format-tag">SQL Server 2012+</span>
+          </div>
+        </div>
+
+        <!-- XML PASTE AREA -->
+        <div class="paste-section">
+          <div class="paste-header">
+            <label class="paste-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/></svg>
+              Paste DTSX XML Content
+            </label>
+            <button class="btn-ghost btn-sm" onclick="clearPaste()">Clear</button>
+          </div>
+          <textarea id="xml-paste" class="xml-textarea" placeholder="<?xml version=&quot;1.0&quot;?>&#10;<DTS:Executable xmlns:DTS=&quot;www.microsoft.com/SqlServer/Dts&quot; ...>&#10;  ...your SSIS package XML...&#10;</DTS:Executable>" spellcheck="false"></textarea>
+          <button class="btn-primary btn-full" onclick="parsePastedXML()" id="parse-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Parse &amp; Convert
+          </button>
+        </div>
+      </div>
+
+      <!-- PROCESSING INDICATOR -->
+      <div class="processing-overlay" id="processing-overlay" style="display:none">
+        <div class="processing-card">
+          <div class="processing-spinner"></div>
+          <h3>Converting Package...</h3>
+          <p id="processing-step">Parsing XML structure...</p>
+          <div class="processing-steps" id="processing-steps-list"></div>
+        </div>
+      </div>
+
+      <!-- RESULTS AREA -->
+      <div class="results-container" id="results-container" style="display:none">
+
+        <!-- PACKAGE SUMMARY -->
+        <div class="package-summary" id="package-summary">
+          <div class="summary-header">
+            <div class="summary-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <h3 class="summary-title" id="summary-pkg-name">Package Converted</h3>
+              <p class="summary-meta" id="summary-meta">Successfully parsed</p>
+            </div>
+            <button class="btn-ghost btn-sm ml-auto" onclick="resetConverter()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+              New Conversion
+            </button>
+          </div>
+          <div class="summary-stats" id="summary-stats"></div>
+        </div>
+
+        <!-- OUTPUT TABS -->
+        <div class="output-section">
+          <div class="tabs-header">
+            <button class="tab-btn active" id="tab-python" onclick="switchTab('python')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Python Scripts
+            </button>
+            <button class="tab-btn" id="tab-dbt" onclick="switchTab('dbt')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              dbt Models
+            </button>
+            <button class="tab-btn" id="tab-airflow" onclick="switchTab('airflow')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Airflow DAG
+            </button>
+            <button class="tab-btn" id="tab-config" onclick="switchTab('config')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07M12 2v2m0 18v-2m-8-8H2m22 0h-2"/></svg>
+              Config &amp; Tests
+            </button>
+            <button class="tab-btn" id="tab-structure" onclick="switchTab('structure')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+              Project Structure
+            </button>
+            <div class="tabs-actions">
+              <button class="btn-accent" onclick="downloadAllFiles()" id="download-all-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download All
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB CONTENTS -->
+          <div class="tab-content active" id="tabcontent-python">
+            <div class="file-tree" id="python-file-tree"></div>
+            <div class="code-viewer" id="python-code-viewer"></div>
+          </div>
+          <div class="tab-content" id="tabcontent-dbt">
+            <div class="file-tree" id="dbt-file-tree"></div>
+            <div class="code-viewer" id="dbt-code-viewer"></div>
+          </div>
+          <div class="tab-content" id="tabcontent-airflow">
+            <div class="file-tree" id="airflow-file-tree"></div>
+            <div class="code-viewer" id="airflow-code-viewer"></div>
+          </div>
+          <div class="tab-content" id="tabcontent-config">
+            <div class="file-tree" id="config-file-tree"></div>
+            <div class="code-viewer" id="config-code-viewer"></div>
+          </div>
+          <div class="tab-content" id="tabcontent-structure">
+            <div class="structure-viewer" id="structure-viewer"></div>
+          </div>
+        </div>
+
+      </div><!-- /results-container -->
+    </section>
+
+    <!-- HISTORY SECTION -->
+    <section class="section" id="section-history">
+      <div class="section-inner">
+        <h2 class="section-heading">Conversion History</h2>
+        <div class="history-list" id="history-list">
+          <div class="empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <p>No conversions yet. Upload a .dtsx file to get started.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCS SECTION -->
+    <section class="section" id="section-docs">
+      <div class="section-inner docs-content">
+        <h2 class="section-heading">Documentation</h2>
+        <div class="docs-grid">
+          <div class="doc-card"><div class="doc-card-icon">🐍</div><h3>Python Extraction</h3><p>Generated scripts use <code>pyodbc</code> + <code>pandas</code> with full logging, Pandera validation, and retry logic.</p></div>
+          <div class="doc-card"><div class="doc-card-icon">🔷</div><h3>dbt Models</h3><p>Three-layer architecture: <code>staging/</code> → <code>intermediate/</code> → <code>mart/</code> with auto-generated YAML tests.</p></div>
+          <div class="doc-card"><div class="doc-card-icon">🌬️</div><h3>Airflow DAGs</h3><p>Production-ready DAGs with retry logic, SLA monitoring, email alerting, and proper dependency chains.</p></div>
+          <div class="doc-card"><div class="doc-card-icon">🔒</div><h3>Secrets Management</h3><p>Credentials via Azure Key Vault or HashiCorp Vault — no hardcoded passwords in code.</p></div>
+          <div class="doc-card"><div class="doc-card-icon">🧪</div><h3>Testing</h3><p>dbt built-in tests (<code>not_null</code>, <code>unique</code>, <code>accepted_values</code>) + pytest unit tests for Python.</p></div>
+          <div class="doc-card"><div class="doc-card-icon">📦</div><h3>CI/CD Ready</h3><p>GitLab CI / Azure DevOps pipeline config generated. Includes lint, test, dbt compile, and deploy stages.</p></div>
+        </div>
+        <div class="doc-mapping">
+          <h3>SSIS → Modern Stack Mapping</h3>
+          <div class="mapping-table-wrapper">
+            <table class="mapping-table">
+              <thead><tr><th>SSIS Component</th><th>Modern Equivalent</th><th>Tool</th></tr></thead>
+              <tbody>
+                <tr><td>Data Source</td><td>Python extraction (<code>pyodbc</code>)</td><td>Python</td></tr>
+                <tr><td>Data Flow Task</td><td>dbt model (<code>.sql</code>)</td><td>dbt</td></tr>
+                <tr><td>Execute SQL Task</td><td>dbt model / Python</td><td>dbt</td></tr>
+                <tr><td>Derived Column Transform</td><td>SQL expression in dbt</td><td>dbt</td></tr>
+                <tr><td>Lookup Transform</td><td>SQL JOIN in dbt</td><td>dbt</td></tr>
+                <tr><td>Conditional Split</td><td>CASE WHEN / WHERE filter</td><td>dbt</td></tr>
+                <tr><td>SQL Agent Job</td><td>Airflow DAG</td><td>Airflow</td></tr>
+                <tr><td>SSIS Package Config</td><td>YAML + .env + Vault</td><td>Multi</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="parser.js"></script>
+  <script src="codegen.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
