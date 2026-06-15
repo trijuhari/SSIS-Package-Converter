@@ -53,5 +53,4 @@ Contributions are welcome. Please fork the repository and open a pull request. F
 ## License
 No license specified. Add a `LICENSE` file if you want to publish this project under an open-source license.
 
----
-_This README was updated by an assistant. Please review and customize for your project specifics._
+ 
