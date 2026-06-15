@@ -1,42 +1,57 @@
+
 # SSIS Package Converter
 
-Konverter sederhana untuk paket SSIS — frontend utility untuk membantu proses modernisasi dan konversi.
+A small utility for assisting SSIS package modernization and conversion tasks. This repository provides a lightweight frontend that parses input package definitions and generates converted output formats.
 
-## Konten proyek
-- `app.js` — entry / logika utama (frontend)
-- `parser.js` — parser untuk mengurai paket atau sumber input
-- `codegen.js` — generator kode/output
-- `index.html` — antarmuka pengguna (UI)
-- `style.css` — stylesheet untuk UI
+## Features
+- Simple browser-based UI for converting SSIS package definitions
+- Parsing module to extract package structure and metadata
+- Code-generation module to emit target-format output
 
-## Prasyarat
-- Web browser modern (Chrome/Firefox/Edge)
-- (Opsional) Node/NPM bila ingin menjalankan server lokal menggunakan paket seperti `http-server`.
+## Repository Contents
+- `index.html` — Web UI entry point
+- `app.js` — Frontend glue logic and UI handlers
+- `parser.js` — Parser for input package definitions
+- `codegen.js` — Generator that produces output from parsed data
+- `style.css` — Basic styling for the UI
 
-## Cara Menjalankan
-1. Buka `index.html` langsung di browser (cukup untuk penggunaan frontend statis).
-2. Atau jalankan server HTTP sederhana dari direktori proyek untuk menghindari masalah CORS:
+## Requirements
+- A modern web browser (Chrome, Firefox, Edge)
+- Optional: Node.js/npm for running a local static server or development tasks
+
+## Quick Start
+Open `index.html` in your browser for a static, no-install experience.
+
+To serve the project locally (recommended to avoid CORS issues):
 
 ```bash
-# dengan Python 3
+# using Python 3
 python3 -m http.server 8000
 
-# atau dengan http-server (Node)
+# or using Node (http-server)
 npx http-server -c-1
 
-# lalu buka http://localhost:8000 di browser
+# then open http://localhost:8000
 ```
 
-## Struktur & Tujuan File
-- `parser.js`: baca dan parse input paket/definisi.
-- `codegen.js`: ambil hasil parse lalu buat output/konversi.
-- `app.js`: glue code yang menghubungkan UI dengan parser dan codegen.
+## Development
+- Edit `parser.js` to change how input packages are parsed.
+- Edit `codegen.js` to change output format or templates.
+- `app.js` wires the UI controls to the parser and codegen modules.
 
-## Kontribusi
-Silakan fork repo dan buka Pull Request. Untuk perubahan besar, buat issue dulu agar diskusi dapat dimulai.
+## Project Structure
 
-## Lisensi
-Tidak ada lisensi resmi yang ditentukan di repo ini.
+- `index.html`
+- `style.css`
+- `app.js`
+- `parser.js`
+- `codegen.js`
+
+## Contributing
+Contributions are welcome. Please fork the repository and open a pull request. For larger changes, open an issue first to discuss the design.
+
+## License
+No license specified. Add a `LICENSE` file if you want to publish this project under an open-source license.
 
 ---
-_File ini dibuat otomatis oleh asisten. Edit sesuai kebutuhan proyek._
+_This README was updated by an assistant. Please review and customize for your project specifics._
